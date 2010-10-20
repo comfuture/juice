@@ -1,0 +1,100 @@
+﻿/* set the image to use and establish the lower-right position */
+.lightbox,
+.lightbox .lbContents,
+.lightbox .LBtitle,
+.lightbox .LBtitle h2 {
+	background: transparent url(../img/box.png) no-repeat bottom right;
+}
+.lightbox {
+	position: absolute;
+	z-index: 9999 !important;
+	width: 335px !important; /* intended total box width - padding-right(next) */	width: 320px; /* IE Win = width - padding */
+	padding-right: 15px; /* the gap on the right edge of the image (not content padding) */
+	margin: 5px auto; /* use to position the box */
+	overflow: hidden;
+}
+
+/* set the top-right image */
+.lightbox .LBtitle {
+	cursor: default;
+	background-position: top right;
+	margin-right: -15px; /* pull the right image over on top of border */
+	padding-right: 20px; /* right-image-gap + right-inside padding */
+}
+
+/* set the top-left image */
+.lightbox .LBtitle h2 {
+	background-position: top left;
+	margin: 0; /* reset main site styles*/
+	border: 0; /* ditto */
+	padding: 17px 0 15px 20px; /* padding-left = image gap + interior padding ... no padding-right */
+	height: auto !important;height: 1%; /* IE Holly Hack */
+
+	font-size: 9pt;
+	color: #FFFFFF;
+}
+
+.lightbox .LBtitle h2 img.closeButton {
+	display: inline;
+	float: right;
+	clear: both;
+}
+
+/* set the lower-left corner image */
+.lightbox .lbContents {
+	font-size: 9pt !mportant;
+	background-position: bottom left;
+	padding: 0px 0 15px 20px; /* mirror .cssbox_head right/left */
+}
+
+#lbControlBar
+{
+	text-align: center;
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: solid 1px #c0c0c0;
+}
+
+.loading {
+	background: url(http://demos.mootools.net/demos/Group/spinner.gif) no-repeat center;
+}
+
+.hide {
+	display: none;
+}
+
+.show {
+	display: block;
+}
+
+.noscroll {
+	overflow: hidden;
+}
+
+.scroll {
+	overflow: scroll;
+}
+
+#overlay {
+	-moz-user-select: none;
+	user-select: none;
+	z-index: 999;
+	background-color: #000000;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	filter: alpha(opacity=1);
+	-moz-opacity: 0.01;
+	opacity: .01;
+	text-align: center;
+}
+
+#lightbox {
+	/* width: 300px; */
+	z-index: 9999;
+}

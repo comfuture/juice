@@ -1,0 +1,51 @@
+﻿*{ margin: 0; padding: 0}
+#lightbox{position:absolute;left:320px;top:150px; z-index:1000;padding:8px 0 0 0;background: url(../img/gaiden/bg_pop01.gif) no-repeat left top;}
+#lightbox .bg{clear:both;float:left; width:337px;padding:0 11px 0 15px;background: url(../img/gaiden/bg_pop02.gif) no-repeat left bottom;}
+#lightbox h1 {float:left;padding:0 0 28px 15px;width:337px; margin:0;}
+#lightbox h1 img{float:left; border: 0}
+#lightbox h1 img#lbCloseButton{float:right; border: 0; cursor: pointer;}
+#lightbox p{width:315px;margin:0 auto;padding:0 5px 10px 5px;line-height:18px;}
+#lightbox p.btn{padding-top:8px;text-align:center;background:url(../img/gaiden/bg_dot.gif) repeat-x left top;}
+.btn img{margin-left:3px;}
+
+#lbContent {height: 100px;}
+
+.hide {
+	display: none;
+}
+
+.show {
+	display: block;
+}
+
+.noscroll {
+	overflow: hidden;
+}
+
+.scroll {
+	overflow: scroll;
+}
+
+#overlay {
+	-moz-user-select: none;
+	user-select: none;
+	z-index: 999;
+	background-color: #000000;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	filter: alpha(opacity=1);
+	-moz-opacity: 0.01;
+	opacity: .01;
+	text-align: center;
+}
+
+#lightbox {
+	/* width: 300px; */
+	z-index: 9999;
+}
