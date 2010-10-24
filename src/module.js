@@ -56,10 +56,9 @@
 			if (arguments.length > 0) {
 				if (typeof arguments[0] == 'undefined') return juice;
 				var modules = $.unique($.makeArray(arguments).join(',').split(','));
-				/*	// disabled dynamic loader
-				if (IS_DYNAMIC) {
-					juice.include('mixer?' + modules.join(','));
-				
+				/*
+				if (juice.env.frech) {
+					juice.include('mixer?' + modules.join(','));				
 				} else {
 				*/
 				if (true) {

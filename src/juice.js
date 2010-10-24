@@ -3,7 +3,6 @@
  * 
  * @include jquery.js
  */
-IS_DYNAMIC = false;{{IS_DYNAMIC}}; 
 var juice = {env:{fresh:true}};
 
 var _scripts = document.getElementsByTagName('SCRIPT');
