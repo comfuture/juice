@@ -1,0 +1,83 @@
+<project name="juice" default="all" basedir=".">
+
+	<property name="PREFIX" value="." />
+	<property description="Folder for juice and min target" name="dist" value="${PREFIX}/dist" />
+
+	<property name="JUICE" value="${dist}/juice.js" />
+	<property name="EXTRACT" value="${dist}/juice.min.js" />
+
+	<available property="qunit" file="test/qunit" />
+
+	<target name="all" depends="juice,lint,min" />
+
+	<target name="qunit-clone" unless="qunit">
+		<exec executable="git" outputproperty="git-qunit" >
+			<arg line="clone git://github.com/jquery/qunit.git test/qunit" />
+		</exec>
+		<echo message="git clone qunit: ${git-qunit}" />
+	</target>
+	<target name="qunit-pull" if="qunit">
+		<exec executable="git" outputproperty="git-qunit" dir="test/qunit" >
+			<arg line="pull origin master" />
+		</exec>
+		<echo message="git pull qunit: ${git-qunit}" />
+	</target>
+
+	<target name="init" depends="qunit-clone,qunit-pull" />
+
+	<target name="juice" depends="init" description="Main juice build, concatenates source files">
+		<echo message="Squeezing Juice" />
+		<mkdir dir="${dist}" />
+		<copy file="src/juice.js" tofile="src/j$.js"/>
+		<replaceregexp match="// development.*$" replace="" flags="mgs"  file="src/j$.js" />
+		<concat destfile="${JUICE}">
+			<fileset file="src/j$.js" />
+			<fileset file="src/core.js" />
+			<fileset file="src/module.js" />
+		</concat>
+		<exec executable="git" outputproperty="date">
+			<arg line="log -1 --pretty=format:%ad" />
+		</exec>
+		<delete file="src/j$.js" />
+		<echo message="${JUICE} fresh juice is here." />
+	</target>
+
+	<target name="lint" depends="juice" description="Check jQuery against JSLint">
+		<exec executable="java">
+			<arg line="-jar build/js.jar build/jslint-check.js" />
+		</exec>
+	</target>
+
+	<target name="min" depends="juice" description="Remove all comments and whitespace, no compression, great in combination with GZip">
+		<echo message="Building ${EXTRACT}" />
+		<apply executable="java" parallel="false" verbose="true" dest="${dist}">
+			<fileset dir="${dist}">
+				<include name="juice.js" />
+			</fileset>
+			<arg line="-jar" />
+			<arg path="build/google-compiler-20100917.jar" />
+			<arg value="--warning_level" />
+			<arg value="QUIET" />
+			<arg value="--js_output_file" />
+			<targetfile />
+			<arg value="--js" />
+			<mapper type="glob" from="juice.js" to="tmpmin" />
+		</apply>
+		<concat destfile="${EXTRACT}">
+			<filelist files="${JUICE}, ${dist}/tmpmin" />
+			<filterchain>
+				<headfilter lines="15" />
+			</filterchain>
+		</concat>
+		<concat destfile="${EXTRACT}" append="yes">
+			<filelist files="${dist}/tmpmin" />
+		</concat>
+		<delete file="${dist}/tmpmin" />
+		<echo message="${EXTRACT} built." />
+	</target>
+
+	<target name="clean">
+		<delete dir="${dist}" />
+		<delete dir="test/qunit" />
+	</target>
+</project>
