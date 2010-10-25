@@ -6,13 +6,14 @@
 	 */
 	var Klass = function(code){
 		var klass = function() {
-			var instance = (null != arguments[0] && null != this.__init__
-					&& 'function' == typeof this.__init__)
-				? this.__init__.apply(this, arguments)
+			var instance = (null != arguments[0] && this.__init__ &&
+					'function' == typeof this.__init__)
+				? code.__init__.apply(this, arguments)
 				: this;
 			return instance;
 		};
-		$.extend(klass, this, klass.prototype, {
+		$.extend(klass, this);
+		$.extend(klass.prototype, {
 			'bind': function(type, fn) {
 				this.__events__ = this.__events__ || {};
 				this.__events__[type] = this.__events__[type] || [];
@@ -39,7 +40,7 @@
 			}
 		}, code);
 
-		klass.constructor = Class;
+		klass.constructor = Klass;
 		return klass;
 	};
 
@@ -107,8 +108,7 @@
 					fragment: match[5]
 				};
 			};
-			var obj = parse(url);
-			$.extend(this, obj);
+			$.extend(this, parse(url));
 		},
 		toString: function() {
 			var str ='';
