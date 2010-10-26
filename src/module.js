@@ -6,9 +6,6 @@
 			var scope = function(code) {
 				if (code)
 					code.apply(this);
-				this.toString = function() {
-					return '[juice$scope (' + ns + ')]';
-				};
 				return scope;
 			};
 			
@@ -29,15 +26,16 @@
 			}, properties)).appendTo($('head'));
 		},
 		'include': function(source, callback) {
+			callback = callback || function() {};
 			var realSource = /^https?:\/\//.test(source) ? source
 					: juice.env.base + source;
 			if (juice.options.debug)
 				realSource = realSource.replace(/\.js$/, '.debug.js');
 
-			if (callback && juice.scripts.indexOf(realSource))
+			if (juice.scripts.indexOf(realSource) > -1)
 				callback();
 			else {
-				$.getScript(source, callback);
+				$.getScript(realSource, callback);
 				juice.scripts.push(realSource);
 			}
 			return juice;
@@ -55,7 +53,11 @@
 		'require': function() {
 			if (arguments.length > 0) {
 				if (typeof arguments[0] == 'undefined') return juice;
-				var modules = $.unique($.makeArray(arguments).join(',').split(','));
+				arguments = $.makeArray(arguments);
+				var callback = function() {};
+				if (typeof arguments[arguments.length-1] == 'function')
+					callback = arguments.pop();
+				var modules = $.unique(arguments.join(',').split(','));
 				/*
 				if (juice.env.frech) {
 					juice.include('mixer?' + modules.join(','));				
@@ -63,7 +65,7 @@
 				*/
 				if (true) {
 					$.each(modules, function(i, m) {					
-						juice.include(m.replace(/\./, '/') +'.js');
+						juice.include(m.replace(/\./, '/') +'.js', callback);
 					});
 				}
 				juice.modules = $.unique($.merge(juice.modules, modules));

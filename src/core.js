@@ -131,4 +131,4 @@
 			}
 		}
 	});
-})(jQuery, j$);
+})(jQuery, juice);
