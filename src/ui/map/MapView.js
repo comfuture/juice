@@ -1,10 +1,11 @@
 /**
  * 
  */
-__TOP__.namespace('ui.map');
-__TOP__.include('http://maps.google.com/maps/api/js?sensor=true', function() {
+juice.namespace('ui.map');
+
+juice.include('http://maps.google.com/maps/api/js?sensor=true', function() {
 	(function($){
-		__TOP__.ui.map.MapView = function(el, options) {
+		juice.ui.map.MapView = function(el, options) {
 			$this = this;
 			this.options = $.extend({
 				'zoom': 8,
@@ -20,7 +21,7 @@ __TOP__.include('http://maps.google.com/maps/api/js?sensor=true', function() {
 		}
 		
 		$.fn.mapView = function(options) {
-			return this.data('map', new __TOP__.ui.map.MapView(this.get(0), options));
+			return this.data('map', new juice.ui.map.MapView(this.get(0), options));
 		}
 	})(jQuery);
 });
