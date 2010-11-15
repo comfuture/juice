@@ -3,6 +3,7 @@
 	<property name="PREFIX" value="." />
 	<property description="Folder for juice and min target" name="dist" value="${PREFIX}/dist" />
 
+	<property name="JQUERY" value="src/_ext/jquery/dist/jquery.js" />
 	<property name="JUICE" value="${dist}/juice.js" />
 	<property name="EXTRACT" value="${dist}/juice.min.js" />
 
@@ -23,7 +24,16 @@
 		<echo message="git pull qunit: ${git-qunit}" />
 	</target>
 
-	<target name="init" depends="qunit-clone,qunit-pull" />
+	<target name="jquery">
+		<exec executable="git" outputproperty="git-submodule-update">
+			<arg line="submodule update" />
+		</exec>
+		<echo message="git submodule update: ${git-submodule-update}" />
+		<ant dir="src/_ext/jquery" target="jquery" inheritAll="false"/>
+		<echo message="built submodule: jquery" />
+	</target>
+
+	<target name="init" depends="jquery,qunit-clone,qunit-pull" />
 
 	<target name="juice" depends="init" description="Main juice build, concatenates source files">
 		<echo message="Squeezing Juice" />
@@ -50,9 +60,13 @@
 
 	<target name="min" depends="juice" description="Remove all comments and whitespace, no compression, great in combination with GZip">
 		<echo message="Building ${EXTRACT}" />
+		<concat destfile="${dist}/merged.js">
+			<fileset file="${JQUERY}"/>
+			<fileset file="${dist}/juice.js" />
+		</concat>
 		<apply executable="java" parallel="false" verbose="true" dest="${dist}">
 			<fileset dir="${dist}">
-				<include name="juice.js" />
+				<include name="merged.js" />
 			</fileset>
 			<arg line="-jar" />
 			<arg path="build/google-compiler-20100917.jar" />
@@ -61,18 +75,13 @@
 			<arg value="--js_output_file" />
 			<targetfile />
 			<arg value="--js" />
-			<mapper type="glob" from="juice.js" to="tmpmin" />
+			<mapper type="glob" from="merged.js" to="tmpmin" />
 		</apply>
-		<concat destfile="${EXTRACT}">
-			<filelist files="${JUICE}, ${dist}/tmpmin" />
-			<filterchain>
-				<headfilter lines="15" />
-			</filterchain>
-		</concat>
 		<concat destfile="${EXTRACT}" append="yes">
 			<filelist files="${dist}/tmpmin" />
 		</concat>
 		<delete file="${dist}/tmpmin" />
+		<delete file="${dist}/merged.js" />
 		<echo message="${EXTRACT} built." />
 	</target>
 
