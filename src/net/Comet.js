@@ -1,14 +1,18 @@
-__TOP__.namespace('net');
+juice.namespace('net');
 
-__TOP__.net.Comet = function(url, options) {
-
-
-	this.listen = function() {
-		var onReconnect = function(e) {
+juice.net.Comet = Class({
+	'__init__': function(url, options) {
+		this.url = url;
+		this.options = options;
+		if (url && options)
+			this.listen();
+	},
+	'listen': function() {
+		var onReconnect = function(event) {
 			$(this).success(onReconnect).failure(onReconnect);
 		}
-		var listener = $.ajax(url, options)
+		var listener = $.ajax(this.url, this.options)
 			.success(onReconnect)
-			.failure(onReconnect);
+			.failure(onREconnect);
 	}
-}
+});
