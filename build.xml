@@ -85,6 +85,10 @@
 		<echo message="${EXTRACT} built." />
 	</target>
 
+	<target name="modules" depends="juice" description="compress modules">
+		
+	</target>
+
 	<target name="clean">
 		<delete dir="${dist}" />
 		<delete dir="test/qunit" />

@@ -30,7 +30,8 @@
 				return this;
 			},
 
-			'trigger': function(type, args){
+			'trigger': function(type) {
+				var args = $.makeArray(arguments); args.shift();
 				if (this.__events__ && this.__events__[type]){
 					var evt = $.Event(type);
 					evt.target = this;
