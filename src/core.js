@@ -5,14 +5,11 @@
 	 * 
 	 */
 	var Klass = function(code){
-		var klass = function() {			
-			if(null != arguments[0]){
-				var instance = (null != arguments[0] && this.__init__ && 'function' == typeof this.__init__) ? code.__init__.apply(this, arguments) : this ;
-				return instance;
-			}else{
-				var instance = (this.__init__ && 'function' == typeof this.__init__) ? code.__init__.apply(this) : this ;
-				return instance;
-			}			
+		var klass = function() {
+			var instance = ('function' == typeof code.__init__)
+				? code.__init__.apply(this, arguments || [])
+				: this;
+			return instance;
 		};
 		$.extend(klass, this);
 		$.extend(klass.prototype, {

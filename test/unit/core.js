@@ -22,13 +22,30 @@ test('Oop', function() {
 		}
 	});
 
+	var NoArgument = Class({
+		foo: function() {
+			juice.log('foo');
+		}
+	});
+
+	var WithArgument = Class({
+		__init__: function(arg1) {
+			this.arg1 = arg1;
+		}
+	});
+
 	var cat = new Cat();
 	var maroo = new Human();
+	var noargs = new NoArgument();
+	var withargs = new WithArgument('test');
 
 	ok(cat instanceof Cat, 'Cat class can be instance');
 	equal(cat.voice, 'mew~', 'Cat class executed constructor');
 	equal(cat.inteligent, 10, 'Cat class executed parent constructor');
 	ok(maroo instanceof Human, 'Human class can be instance');
+	ok(noargs instanceof NoArgument, 'Class with no argument can be instanced');
+	ok(withargs instanceof WithArgument, 'Class with argument can be instanced');
+	equal(withargs.arg1, 'test', 'Class with argument works profer');
 
 	// events
 	cat.bind('say', function(e, voice) {
