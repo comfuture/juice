@@ -3,7 +3,12 @@
  * 
  * @include jquery.js
  */
-var juice = {env:{fresh:true}};
+
+var juice = $.extend(function() {
+	return juice;	
+}, {
+	'env': {'fresh':true}
+});
 
 var _scripts = document.getElementsByTagName('SCRIPT');
 for (var i = 0, cnt = _scripts.length; i < _scripts.length; i++) {
@@ -18,7 +23,7 @@ window.juice = window.j$ = juice;
 
 // development
 juice.env.fresh = false;
-var all = ['core.js', 'module.js'];
+var all = ['core.js', 'util.js', 'module.js'];
 for (i = 0, cnt=all.length; i < cnt; i++) {
 	document.write('<s' + 'cript type="text/javascript" src="' + juice.env.base
 			+ all[i] + '"></s' + 'cript>');

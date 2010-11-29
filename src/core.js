@@ -11,6 +11,7 @@
 				: this;
 			return instance;
 		};
+		this.toString = function() { return '[object Class]' }
 		$.extend(klass, this);
 		$.extend(klass.prototype, {
 			'bind': function(type, fn) {
@@ -123,12 +124,16 @@
 	
 	window.URL = URL;
 
-	$.extend(juice, {
-		'options': $.extend({}, new URL(juice.env.src).query),
-		'log' : function() {
+	var Juice = Class({
+		options: new URL(juice.env.src).query,
+		log: function() {
 			if (typeof window.console != 'undefined') {
 				console.log.apply(console, arguments);
 			}
+		},
+		toString: function() {
+			return '[object Juice]';
 		}
 	});
+	$.extend(juice, new Juice);
 })(jQuery, juice);
