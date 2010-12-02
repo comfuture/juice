@@ -5,8 +5,10 @@
  */
 
 var juice = $.extend(function() {
+	$.merge(juice._ready, arguments);
 	return juice;	
 }, {
+	'_ready': [],
 	'env': {'fresh':true}
 });
 

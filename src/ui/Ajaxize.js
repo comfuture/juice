@@ -14,17 +14,17 @@ juice.ui.Ajaxize = Class({
 		this.selector = selector;
 		$(selector).each(function(idx, el) {
 			el = $(el);
-			var opts = (el.attr('rel') || '').split(' ');
-			var hasOption = function(opt) { return opts.indexOf(opt) > -1; };
-			var pos = hasOption('before') ? 'Before' : 'After';
-			var toggle = hasOption('toggle');
-			var increase = hasOption('increase');
-			var inherit = hasOption('inherit');
-			var del = hasOption('delete');
-			var focus = hasOption('focus');
-			var insert = hasOption('insert');
-			var content_only = hasOption('content-only');
-			var target_name = el.attr('target');
+			var opts = (el.attr('rel') || '').split(' '),
+				hasOption = function(opt) { return opts.indexOf(opt) > -1; },
+				pos = hasOption('before') ? 'Before' : 'After',
+				toggle = hasOption('toggle'),
+				increase = hasOption('increase'),
+				inherit = hasOption('inherit'),
+				del = hasOption('delete'),
+				focus = hasOption('focus'),
+				insert = hasOption('insert'),
+				content_only = hasOption('content-only'),
+				target_name = el.attr('target');
 			target_name = /#?[a-z][a-z0-9_>\+:\(\)\[\] ]*/i.test(target_name)
 				? target_name
 				: '#target_' + Math.ceil(Math.random() * 1000000);

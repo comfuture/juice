@@ -6,9 +6,17 @@
 	<link rel="stylesheet" type="text/css" href="qunit/qunit/qunit.css" />
 	<script type="text/javascript" src="qunit/qunit/qunit.js"></script>
 	<script type="text/javascript" src="../src/_ext/jquery/dist/jquery.js"></script>
-	<script type="text/javascript" src="../src/juice.js"></script>
+	<script type="text/javascript" src="../src/juice.js?m=ui.Flash"></script>
 	
 	<script type="text/javascript" src="unit/core.js"></script>
+	<script type="text/javascript">
+		juice.require('ui.Form')
+		     .require('ui.Flash')
+		
+		(function() {
+			alert('ui.Form and ui.Flash loaded');
+		});
+	</script>
 </head>
 <body>
 	<h1 id="qunit-header">Juice unit test</h1>
