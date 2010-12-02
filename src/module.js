@@ -1,11 +1,10 @@
 (function($, juice) { 
 	$.extend(juice, {
+		'$queue': [],
 		'module': {
-			'queue': [],
 			'loaded': []
 		},
 		'script': {
-			'queue': [],
 			'loaded': []
 		},
 		'namespace': function(ns) {
@@ -27,9 +26,12 @@
 			return nsobj;
 		},
 		'css': function(source, properties){
-			return $('<link/>').attr($.extend({
-				'rel': 'stylesheet', 'media': 'screen', 'type': 'text/css', 'href': source
-			}, properties)).appendTo($('head'));
+			var link = document.createElement('link');
+			link.href = source;
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			$('head').get(0).appendChild(link);
+			return juice;
 		},
 		'include': function(source, callback) {
 			callback = callback || function() {};
@@ -41,12 +43,13 @@
 			if (juice.script.loaded.indexOf(realSource) > -1)
 				callback();
 			else {
-				juice.script.queue.push(realSource);
+				juice.$queue.push(realSource);
 				var wrapper = function(e) {
-					var found = juice.script.queue.indexOf(realSource);
+					var found = juice.$queue.indexOf(realSource);
 					if (found > -1)
-						juice.script.loaded.push(juice.script.queue.splice(found, 1)[0]);
+						juice.script.loaded.push(juice.$queue.splice(found, 1)[0]);
 					callback();
+					juice._checkReady();
 				}
 				var script = document.createElement('script');
 				script.setAttribute('type', 'text/javascript');
@@ -64,6 +67,13 @@
 				$('head').get(0).appendChild(script);
 			}
 			return juice;
+		},
+		'_checkReady': function() {
+			if (juice.$queue.length > 0) return;
+			$.each(juice._ready, function(i, f) {
+				f();
+			});
+			juice._ready = [];
 		},
 		/**
 		 * 
@@ -85,22 +95,13 @@
 			var args = $.makeArray(arguments);
 			if (args.length > 0) {
 				if (typeof args[0] == 'undefined') return juice;
-
-				var checkReady = function() {
-					if (juice.module.queue.length > 0) return;
-					$.each(juice._ready, function(i, f) {
-						f();
-					});
-					juice._ready = [];
-				}
-
 				var callback = function() {
 					clearTimeout(this.timeout);
 					// XXX: take care of race condition
-					var found = juice.module.queue.indexOf(this.module);
+					var found = juice.$queue.indexOf(this.module);
 					if (found > -1)
-						juice.module.loaded.push(juice.module.queue.splice(found, 1)[0]);
-					checkReady();
+						juice.module.loaded.push(juice.$queue.splice(found, 1)[0]);
+					juice._checkReady();
 				};
 				if (typeof args[args.length-1] == 'function')
 					juice._ready.push(args.pop());
@@ -112,14 +113,14 @@
 				*/
 				if (true) {
 					$.each(modules, function(i, m) {
-						if (juice.module.loaded.indexOf(m) > -1 || juice.module.queue.indexOf(m) > -1) return;
+						if (juice.module.loaded.indexOf(m) > -1 || juice.$queue.indexOf(m) > -1) return juice._checkReady();
 						var t = setTimeout(function() {
-							var found = juice.module.queue.indexOf(m);
+							var found = juice.$queue.indexOf(m);
 							if (found > -1)
-								juice.module.queue.splice(found, 1);
-							checkReady();
+								juice.$queue.splice(found, 1);
+							juice._checkReady();
 						}, 5000);
-						juice.module.queue.push(m);
+						juice.$queue.push(m);
 						juice.include(m.replace(/\./, '/') +'.js', callback.bind({'module':m, 'timeout':t}));
 					});
 				}
