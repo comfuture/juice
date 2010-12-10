@@ -5,7 +5,10 @@
  */
 
 var juice = $.extend(function() {
-	$.merge(juice._ready, arguments);
+	//$.merge(juice._ready, arguments);
+	if (juice.include)
+		return juice.include.apply(juice, arguments);
+	$.apply($, arguments);
 	return juice;	
 }, {
 	'_ready': [],
