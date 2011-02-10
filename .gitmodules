@@ -1,6 +1,1 @@
-[submodule "src/_ext/jquery"]
-	path = src/_ext/jquery
-	url = git://github.com/jquery/jquery.git
-[submodule "src/_ext/jquery-ui"]
-	path = src/_ext/jquery-ui
-	url = git://github.com/jquery/jquery-ui.git
+
