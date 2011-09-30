@@ -21,7 +21,7 @@ juice.namespace('ui');
  *		tmp.h4.prepend(span({'class': 'new'}, 'new'));
  *	}
  */
-var HTML5 = (function($) {
+juice.ui.HTML5 = (function($) {
 
 	function Tag(name, properties, children) {
 		var el = $('<'+name+'>').attr(properties);
